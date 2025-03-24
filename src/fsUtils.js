@@ -12,7 +12,7 @@ async function readFiles(directory){
 
             try {
                 const stats = await fs.promises.stat(filePath);
-                files.push(filePath);
+                files.push(item.name);
             } catch(err) {
                 console.log(err);
             }
