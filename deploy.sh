@@ -7,6 +7,10 @@ systemctl stop privatedrive.service
 cd $(dirname "$0")
 git pull
 
+cd Backend
+npm install
+cd ..
+
 cd Frontend
 npm install
 npm run build
