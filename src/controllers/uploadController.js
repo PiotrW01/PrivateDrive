@@ -1,12 +1,12 @@
-const multer = require('multer');
-const { readFiles } = require('../fsUtils');
-const { storagePath } = require('../config');
+const multer = require("multer");
+const { readFiles } = require("../fsUtils");
+const { storagePath } = require("../config");
 
 const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
+    destination: function (req, file, cb) {
         cb(null, storagePath);
     },
-    filename: function(req, file, cb) {
+    filename: function (req, file, cb) {
         cb(null, file.originalname);
     },
 });
@@ -14,10 +14,10 @@ const storage = multer.diskStorage({
 const filter = async (req, file, cb) => {
     const diskFiles = await readFiles(storagePath);
 
-    for(const diskFile of diskFiles){
+    for (const diskFile of diskFiles) {
         console.log(diskFile);
-        if(file.originalname === diskFile){
-            console.log("conflict!")
+        if (file.originalname === diskFile) {
+            console.log("conflict!");
             cb(null, false);
             return;
         }
@@ -25,4 +25,4 @@ const filter = async (req, file, cb) => {
     cb(null, true);
 };
 
-module.exports = multer({storage: storage, fileFilter: filter});
+module.exports = multer({ storage: storage, fileFilter: filter });
