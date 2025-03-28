@@ -16,8 +16,8 @@ npm install
 npm run build
 cd ..
 
-rm -rf /Backend/public/*
-cp -r /Frontend/dist/private-drive-front/browser/* /Backend/public/
+rm -rf Backend/public/*
+cp -r Frontend/dist/private-drive-front/browser/* /Backend/public/
 
 
 systemctl restart privatedrive.service
