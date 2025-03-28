@@ -1,9 +1,11 @@
 const multer = require("multer");
-const { readFiles } = require("../fsUtils");
+const { readFiles } = require("./fileController");
 const { storagePath } = require("../config");
+const path = require("path");
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
+        console.log(path.join(storagePath, req.body.localPath || ""));
         cb(null, storagePath);
     },
     filename: function (req, file, cb) {
@@ -15,9 +17,9 @@ const filter = async (req, file, cb) => {
     const diskFiles = await readFiles(storagePath);
 
     for (const diskFile of diskFiles) {
-        console.log(diskFile);
-        if (file.originalname === diskFile) {
+        if (file.originalname === diskFile.name) {
             console.log("conflict!");
+            console.log(diskFile);
             cb(null, false);
             return;
         }
