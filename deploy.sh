@@ -11,13 +11,15 @@ cd Backend
 npm install
 cd ..
 
-cd Frontend
-npm install
-npm run build
-cd ..
+curl -s https://api.github.com/repos/piotrw01/PrivateDriveFront/releases/latest \
+| grep "browser_download_url" \
+| head -n 1 \
+| sed -E 's/.*"browser_download_url": "(.*)".*/\1/' \
+| xargs curl -L -o frontend.zip
 
 rm -rf Backend/public/*
-cp -r Frontend/dist/private-drive-front/browser/* Backend/public/
+7z x frontend.zip -o./Backend/public/
+rm frontend.zip
 
 
 systemctl restart privatedrive.service
