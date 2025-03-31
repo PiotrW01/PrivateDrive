@@ -17,9 +17,10 @@ curl -s https://api.github.com/repos/piotrw01/PrivateDriveFront/releases/latest 
 | sed -E 's/.*"browser_download_url": "(.*)".*/\1/' \
 | xargs curl -L -o frontend.zip
 
+set +e
 rm -rf Backend/public/*
 7z x frontend.zip -o./Backend/public/
 rm frontend.zip
 
 
-systemctl start privatedrive.service
+systemctl restart privatedrive.service
