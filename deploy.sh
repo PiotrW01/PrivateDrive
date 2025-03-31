@@ -22,4 +22,4 @@ rm -rf Backend/public/*
 rm frontend.zip
 
 
-systemctl restart privatedrive.service
+systemctl start privatedrive.service
