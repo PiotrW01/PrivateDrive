@@ -2,7 +2,12 @@ const path = require("path");
 const os = require("os");
 const fs = require("fs");
 
-const storagePath = path.join(os.homedir(), "PrivateDriveData");
+const platform = os.platform();
+const storagePath = "/var/www/drivedata";
+
+if (platform === 'win32') {
+    const storagePath = path.join(os.homedir(), "PrivateDriveData");
+}
 
 if (!storagePath) {
     console.error("Unsupported OS version");

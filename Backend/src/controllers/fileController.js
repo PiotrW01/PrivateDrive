@@ -56,6 +56,17 @@ class FileController {
         });
         return zip.toBuffer();
     }
+
+    async getFileData(storagePath, name) {
+        var fileData;
+        await new Promise((res, rej) => {
+            fs.readFile(path.join(storagePath, name), (err, data) => {
+                fileData = data;
+                res();
+            });
+        });
+        return fileData;
+    }
 }
 
 const fController = new FileController();

@@ -1,0 +1,12 @@
+<main>
+    <input ngModel #fileInput type="file" />
+    <button (click)="uploadFile()">Upload</button>
+    <button (click)="downloadArchive()">Download ZIP</button>
+    <ul>
+        <li *ngFor="let item of items">
+            <app-item-container [item]="item"></app-item-container>
+        </li>
+    </ul>
+</main>
+
+<router-outlet />
