@@ -8,6 +8,7 @@ const uploadMulter = require("./src/controllers/uploadController");
 const app = express();
 const port = 3000;
 const fs = require("fs");
+const { setTimeout } = require("timers/promises");
 
 app.use(
     cors({
@@ -45,17 +46,18 @@ app.get("/zipfiles", async (req, res) => {
         res.sendStatus(404);
         return;
     }
-    const zipBuffer = await fController.zipFiles(storagePath);
-    if (zipBuffer) {
-        res.set({
-            "Content-Type": "application/zip",
-            "Content-Disposition": `attachment; filename=archive.zip`,
-            "Content-Length": zipBuffer.length,
-        });
-        res.send(zipBuffer);
-    } else {
-        res.sendStatus(500);
-    }
+    const zipPath = await fController.createZipFile(storagePath);
+    res.set({
+        "Content-Type": "application/zip",
+        "Content-Disposition": `attachment; filename=archive.zip`,
+    });
+    const readStream = fs.createReadStream(zipPath);
+    readStream.on("close", () => {
+        fs.rmSync(zipPath);
+        console.log("removed temporary zip");
+    });
+
+    readStream.pipe(res);
 });
 
 app.post("/upload", uploadMulter.any(), async (req, res, next) => {

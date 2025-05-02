@@ -4,8 +4,9 @@ const fs = require("fs");
 
 const platform = os.platform();
 const storagePath = "/var/www/drivedata";
+const tempPath = "/tmp";
 
-if (platform === 'win32') {
+if (platform === "win32") {
     const storagePath = path.join(os.homedir(), "PrivateDriveData");
 }
 
@@ -23,4 +24,4 @@ try {
     process.exit(1);
 }
 
-module.exports = { storagePath };
+module.exports = { storagePath, tempPath };

@@ -1,6 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 const admZip = require("adm-zip");
+const { randomUUID } = require("crypto");
+const { tempPath } = require("../config");
 
 class FileController {
     constructor() {
@@ -41,20 +43,24 @@ class FileController {
         return files;
     }
 
-    async zipFiles(storagePath) {
+    async createZipFile(storagePath) {
         var zip = new admZip();
+        const id = randomUUID();
+        const filePath = path.join(tempPath, id);
         await new Promise((resolve, reject) => {
             zip.addLocalFolderAsync(storagePath, (success, err) => {
                 if (!success) {
                     console.log(err);
                     reject(err);
                 } else {
-                    console.log("yay!");
-                    resolve();
+                    zip.writeZip(filePath, (err) => {
+                        console.log("yay!");
+                        resolve();
+                    });
                 }
             });
         });
-        return zip.toBuffer();
+        return filePath;
     }
 
     async getFileData(storagePath, name) {
