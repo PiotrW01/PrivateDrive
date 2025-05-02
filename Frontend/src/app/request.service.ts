@@ -26,6 +26,7 @@ export class RequestService {
 
     downloadArchive() {
         const a = document.createElement('a');
+        a.download = 'archive.zip';
         a.href = `${this.url}/zipfiles`;
         a.click();
     }

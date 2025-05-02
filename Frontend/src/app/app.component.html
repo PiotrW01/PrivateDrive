@@ -1,12 +1,16 @@
 <main>
-    <input ngModel #fileInput type="file" />
-    <button (click)="uploadFile()">Upload</button>
-    <button (click)="downloadArchive()">Download ZIP</button>
-    <ul>
-        <li *ngFor="let item of items">
-            <app-item-container [item]="item"></app-item-container>
-        </li>
-    </ul>
+    <div class="header">
+        <input ngModel #fileInput type="file" multiple />
+        <button (click)="uploadFiles()">Upload</button>
+        <button (click)="downloadArchive()">Download ZIP</button>
+    </div>
+    <div class="grid-container">
+        <app-item-container
+            *ngFor="let item of items"
+            [item]="item"
+        ></app-item-container>
+    </div>
+    <mat-slide-toggle (change)="toggle($event)"></mat-slide-toggle>
 </main>
 
 <router-outlet />
