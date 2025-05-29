@@ -1,0 +1,13 @@
+<form (ngSubmit)="onLogin()" #loginForm="ngForm" *ngIf="viewLoginForm; else register">
+    <p>login works!</p>
+    <div>
+        <input name="username" [(ngModel)]="username" placeholder="username here!" required>
+        <input name="password" [(ngModel)]="password" placeholder="password here!" required>
+    </div>
+    <button type="submit" [disabled]="!loginForm.valid">Login!</button>
+</form>
+<ng-template #register>
+    <form>
+        <p>Registration currently disabled</p>
+    </form>
+</ng-template>

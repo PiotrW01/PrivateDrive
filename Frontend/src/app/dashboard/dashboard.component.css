@@ -1,0 +1,14 @@
+.grid-container {
+    background-color: dodgerblue;
+    padding: 10px;
+    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, max-content));
+    justify-content: center;
+}
+
+app-item-container {
+    width: 300px;
+    height: 300px;
+    background-color: gray;
+}

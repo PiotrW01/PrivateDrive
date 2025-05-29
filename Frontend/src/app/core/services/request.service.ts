@@ -1,18 +1,22 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import {
     HttpClient,
     HttpHeaderResponse,
     HttpHeaders,
 } from '@angular/common/http';
+import { AppConfigService } from './app-config.service';
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 export class RequestService {
-    private url: string = 'http://localhost:3000';
+    private url!: string;
 
-    constructor(private client: HttpClient) {}
-
+    constructor(private client: HttpClient, private appConfig: AppConfigService) {
+        this.url = this.appConfig.configData!.apiUrl;
+        console.log(this.appConfig.configData);
+    }
+    
     getItems() {
         return this.client.get(`${this.url}/files`);
     }

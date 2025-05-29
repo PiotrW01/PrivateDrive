@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { SortMode } from './sort-mode';
-import { Item } from './item';
+import { SortMode } from '../models/sort-mode';
+import { Item } from '../models/item';
 
 @Injectable({
     providedIn: 'root',

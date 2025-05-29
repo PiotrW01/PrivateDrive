@@ -1,0 +1,14 @@
+<main>
+    <div class="header">
+        <input ngModel #fileInput type="file" multiple />
+        <button (click)="uploadFiles()">Upload</button>
+        <button (click)="downloadArchive()">Download ZIP</button>
+    </div>
+    <div class="grid-container">
+        <app-item-container
+            *ngFor="let item of items"
+            [item]="item"
+        ></app-item-container>
+    </div>
+    <mat-slide-toggle (change)="toggle($event)"></mat-slide-toggle>
+</main>
