@@ -1,8 +1,9 @@
-const fs = require("fs");
-const path = require("path");
-const admZip = require("adm-zip");
-const { randomUUID } = require("crypto");
-const { tempPath } = require("../config");
+import fs from "fs";
+import path from "path";
+import admZip from "adm-zip";
+import { randomUUID } from "crypto";
+import { Item } from "../interfaces/item";
+import { tempPath } from '../config';
 
 class FileController {
     constructor() {
@@ -15,8 +16,8 @@ class FileController {
 
     async createFolder() {}
 
-    async readFiles(directory) {
-        const files = [];
+    async readFiles(directory: string): Promise<Item[]> {
+        const tempItems: Item[] = [];
 
         const items = await fs.promises.readdir(directory, {
             withFileTypes: true,
@@ -28,10 +29,11 @@ class FileController {
 
                 try {
                     const stats = await fs.promises.stat(filePath);
-                    files.push({
+                    tempItems.push({
                         name: item.name,
                         birthtime: stats.birthtimeMs,
-                        size: stats.size,
+                        lastModified: stats.mtime,
+                        size: stats.size
                     });
                 } catch (err) {
                     console.log(err);
@@ -40,10 +42,10 @@ class FileController {
         });
 
         await Promise.all(promises);
-        return files;
+        return tempItems;
     }
 
-    async createZipFile(storagePath) {
+    async createZipFile(storagePath: string): Promise<string> {
         var zip = new admZip();
         const id = randomUUID();
         const filePath = path.join(tempPath, id);
@@ -55,7 +57,7 @@ class FileController {
                 } else {
                     zip.writeZip(filePath, (err) => {
                         console.log("yay!");
-                        resolve();
+                        resolve(0);
                     });
                 }
             });
@@ -63,18 +65,16 @@ class FileController {
         return filePath;
     }
 
-    async getFileData(storagePath, name) {
+    async getFileData(storagePath: string, name: string) {
         var fileData;
-        await new Promise((res, rej) => {
+        await new Promise((resolve, reject) => {
             fs.readFile(path.join(storagePath, name), (err, data) => {
                 fileData = data;
-                res();
+                resolve(0);
             });
         });
         return fileData;
     }
 }
 
-const fController = new FileController();
-
-module.exports = fController;
+export default new FileController();
