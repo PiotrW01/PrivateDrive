@@ -6,16 +6,17 @@ import {
   ViewChild,
   viewChild,
 } from '@angular/core';
-import { RequestService } from '../core/services/request.service';
-import { Item } from '../core/models/item';
+import { RequestService } from '../../services/request.service';
+import { Item } from '../../models/item';
 import { NgFor, NgIf } from '@angular/common';
-import { SortMode } from '../core/models/sort-mode';
-import { ItemSortService } from '../core/services/item-sort.service';
-import { ItemContainerComponent } from '../item-container/item-container.component';
+import { SortMode } from '../../models/sort-mode';
+import { ItemSortService } from '../../services/item-sort.service';
+import { ItemContainerComponent } from '../../components/item-container/item-container.component';
 import {
     MatSlideToggleChange,
     MatSlideToggleModule,
 } from '@angular/material/slide-toggle';
+import { HttpEventType } from '@angular/common/http';
 
 @Component({
   selector: 'app-dashboard',
@@ -48,23 +49,46 @@ export class DashboardComponent implements OnInit {
           );
           return;
       }
-
       this.fileQueue = Array.from(this.fileInput.nativeElement.files);
       this.uploadNextFile();
   }
 
   private async uploadNextFile() {
-      if (this.fileQueue.length == 0) {
-          this.updateItemList();
-          return;
-      }
       const file: File = this.fileQueue[0];
       this.fileQueue.shift();
-      this.requestService.uploadItem(file).subscribe({
-          complete: () => {
-              console.log('File uploaded!');
-              this.uploadNextFile();
-          },
+      this.requestService.uploadItem(file).subscribe(event =>
+      {
+          if(event.type === HttpEventType.UploadProgress)
+          {
+            const percentDone = Math.round(100 * event.loaded / (event.total ?? event.loaded));
+            console.log(`Upload progress: ${percentDone}%`);
+          }
+          else if (event.type === HttpEventType.ResponseHeader)
+          {
+            if(!event.ok)
+            {
+                console.log(`Oopsie couldnt upload file ${file.name}`);
+                if(this.fileQueue.length > 0)
+                {
+                    this.uploadNextFile();
+                }
+            }
+          }
+          else if (event.type === HttpEventType.Response)
+          {
+            console.log("File uploaded");
+            const date: Date = new Date(file.lastModified);
+            this.items.push({name: file.name, size: file.size, lastModified: date, birthtime: 0});
+            if(this.fileQueue.length == 0)
+            {
+                this.sorter.sortBy(this.items, this.sortMode, this.isSortAscending);
+                console.log("upload complete!");
+            }
+            else
+            {
+                this.uploadNextFile();
+            }
+          }
       });
   }
 
@@ -85,6 +109,7 @@ export class DashboardComponent implements OnInit {
       this.requestService.getItems().subscribe((receivedItems) => {
           (receivedItems as Item[]).forEach((rItem) => {
               this.items.push(rItem);
+              console.log(rItem);
           });
           this.sorter.sortBy(this.items, this.sortMode, this.isSortAscending);
       });

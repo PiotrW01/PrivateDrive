@@ -5,25 +5,34 @@ import { AppComponent } from './app/app.component';
 import { AppConfigService } from './app/core/services/app-config.service';
 
 async function main() {
-  try {
-    const response = await fetch('/data/config.json');
-    if (!response.ok) throw new Error('Failed to load config.json');
-    const configData = await response.json();
-
-    const configService = new AppConfigService();
-    configService.load(configData);
-
-    const extendedAppConfig: ApplicationConfig = {
-      ...appConfig,
-      providers: [
-        { provide: AppConfigService, useValue: configService },
-        ...appConfig.providers,
-      ]
-    };
-
-    await bootstrapApplication(AppComponent, extendedAppConfig);
-  } catch (err) {
-    console.error(err);
+  // switch to true if api url is different from server url ## see public/config.json
+  if(false)
+  {
+    try {
+      const response = await fetch('/data/config.json');
+      if (!response.ok) throw new Error('Failed to load config.json');
+      const configData = await response.json();
+  
+      const configService = new AppConfigService();
+      configService.load(configData);
+  
+      const extendedAppConfig: ApplicationConfig = {
+        ...appConfig,
+        providers: [
+          { provide: AppConfigService, useValue: configService },
+          ...appConfig.providers,
+        ]
+      };
+  
+      await bootstrapApplication(AppComponent, extendedAppConfig);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  else 
+  {
+    bootstrapApplication(AppComponent, appConfig)
+      .catch((err) => console.error(err));
   }
 }
 

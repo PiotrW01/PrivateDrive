@@ -5,7 +5,7 @@ import { AppConfig } from '../models/appconfig';
   providedIn: 'root'
 })
 export class AppConfigService {
-  configData!: AppConfig
+  configData?: AppConfig
 
   constructor() { }
 

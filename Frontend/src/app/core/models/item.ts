@@ -1,6 +1,6 @@
 export interface Item {
-    id: string;
-    name: string;
-    birthtime: number;
-    size: number;
+    name: string,
+    size: number
+    birthtime: number,
+    lastModified: Date,
 }

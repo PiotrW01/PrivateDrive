@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { Item } from '../core/models/item';
-import { RequestService } from '../core/services/request.service';
+import { Item } from '../../models/item';
+import { RequestService } from '../../services/request.service';
 
 @Component({
     selector: 'app-item-container',
