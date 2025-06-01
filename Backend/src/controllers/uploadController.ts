@@ -1,8 +1,8 @@
 import multer, { StorageEngine, FileFilterCallback } from 'multer';
-import path from 'path';
-import { Request } from 'express';
 import fController from "./fileController";
 import { storagePath } from "../config";
+import { Request } from 'express';
+import path from 'path';
 
 // Configure storage engine
 const storage: StorageEngine = multer.diskStorage({

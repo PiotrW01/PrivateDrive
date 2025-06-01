@@ -1,14 +1,12 @@
-import fs from "fs";
-import path from "path";
-import admZip from "adm-zip";
-import { randomUUID } from "crypto";
 import { Item } from "../interfaces/item";
 import { tempPath } from '../config';
+import { randomUUID } from "crypto";
+import admZip from "adm-zip";
+import path from "path";
+import fs from "fs";
 
 class FileController {
-    constructor() {
-        const fileCache = [];
-    }
+    private itemCache: Item[] = [];
 
     async deleteFile() {}
 

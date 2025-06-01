@@ -1,27 +1,29 @@
-import path from "path";
-require("dotenv").config({ path: path.join(__dirname, ".env") });
-import cors from "cors";
+//require("dotenv").config({ path: path.join(__dirname, ".env") });
 import express, {NextFunction, Request, Response} from 'express';
 import uploadMulter from "./src/controllers/uploadController";
-import fs from 'fs';
-import { storagePath } from "./src/config";
 import fController from "./src/controllers/fileController";
-const app = express();
-const port = 3000;
+import { storagePath } from "./src/config";
+import path from "path";
+import cors from "cors";
+import fs from 'fs';
 
-class Server
+export class Server
 {
-    constructor()
-    {
-        app.use(
+    private app = express();
+    private port = 3000;
+
+    constructor(){
+        this.app.use(
             cors({
                 origin: "http://localhost:4200",
             })
         );
-        
-        app.use("/", express.static(path.join(__dirname, "public")));
-        
-        app.get("/file/:id", async (req, res) => {
+        this.app.use("/", express.static(path.join(__dirname, "public")));
+        this.setupRoutes();
+    }
+    
+    setupRoutes(): void{
+        this.app.get("/file/:id", async (req, res) => {
             const files = await fController.readFiles(storagePath);
             for (const file of files) {
                 if (file.name === req.params.id) {
@@ -39,12 +41,12 @@ class Server
             res.sendStatus(404);
         });
         
-        app.get("/files", async (req, res) => {
+        this.app.get("/files", async (req, res) => {
             const files = await fController.readFiles(storagePath);
             res.send(files);
         });
         
-        app.get("/zipfiles", async (req, res) => {
+        this.app.get("/zipfiles", async (req, res) => {
             const files = await fController.readFiles(storagePath);
             if (files.length == 0) {
                 res.sendStatus(404);
@@ -64,7 +66,7 @@ class Server
             readStream.pipe(res);
         });
         
-        app.post("/upload", uploadMulter.single('file'), async (req: Request, res: Response, next: NextFunction) => {
+        this.app.post("/upload", uploadMulter.single('file'), async (req: Request, res: Response, next: NextFunction) => {
             if (!req.file) {
                 res.sendStatus(400);
                 return;
@@ -90,18 +92,23 @@ class Server
             }
         });
         
-        app.post("/createfolder", async (req, res) => {
+        this.app.post("/createfolder", async (req, res) => {
             res.sendStatus(501);
         });
         
-        app.delete("/removefile", async (req, res) => {
+        this.app.delete("/removefile", async (req, res) => {
             res.sendStatus(501);
         });
-        
-        app.listen(port, () => {
-            console.log(`Server running on port ${port}`);
+    }
+    
+    start(port = this.port): void{        
+        this.app.listen(port, () => {
+            console.log(`Server running on port ${this.port}`);
         });
     }
 }
 
-export default new Server();
+if(require.main === module){
+    const server = new Server();
+    server.start();
+}
