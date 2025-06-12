@@ -1,19 +1,32 @@
 .container {
     display: flex;
     height: 100%;
+    width: 100%;
     flex-wrap: wrap;
-    flex-direction: column;
-    gap: 24px;
     align-content: center;
     justify-content: center;
+    align-items: center;
+    justify-items: center;
+}
+
+.icon-name {
+    display: flex;
+    word-break: break-all;
+    gap: 8px;
+    width: 80%;
 }
 
 .file-image {
-    width: 40%;
+    width: 1rem;
     aspect-ratio: 1;
 }
 
-.main {
-    display: flex;
-    gap: 10px;
+.container button {
+    width: auto;
+    margin-left: 12px;
+    margin-right: 12px;
+}
+
+.container button:hover::after {
+    background-color: var(--primary-var);
 }

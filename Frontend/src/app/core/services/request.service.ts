@@ -9,36 +9,34 @@ import { AppConfigService } from './app-config.service';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class RequestService {
     private apiUrl!: string;
 
-    constructor(private client: HttpClient, private appConfig: AppConfigService) {
-        if(!environment.production)
-        {
+    constructor(
+        private client: HttpClient,
+        private appConfig: AppConfigService
+    ) {
+        if (!environment.production) {
             this.apiUrl = environment.apiUrl;
             console.log(this.apiUrl);
             return;
         }
-        if(this.appConfig.configData)
-        {
+        if (this.appConfig.configData) {
             this.apiUrl = this.appConfig.configData.apiUrl;
             console.log(this.appConfig.configData);
-        }
-        else
-        {
+        } else {
             this.apiUrl = `http://api.${window.location.hostname}`;
             console.log(this.apiUrl);
         }
     }
-    
+
     getItems() {
         return this.client.get(`${this.apiUrl}/files`);
     }
 
-    downloadFile(id: string) 
-    {
+    downloadFile(id: string) {
         const a = document.createElement('a');
         a.download = id;
         a.href = `${this.apiUrl}/file/${encodeURIComponent(id)}`;
@@ -67,7 +65,9 @@ export class RequestService {
 
     moveItem() {}
 
-    deleteItem() {}
+    deleteItem(name: string) {
+        this.client.delete(`${this.apiUrl}/removefile`);
+    }
 
     renameItem() {}
 

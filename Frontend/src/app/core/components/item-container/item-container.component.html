@@ -1,5 +1,10 @@
 <div class="container">
-    {{ item.name }}
-    <img class="file-image" src="/data/images/file.svg" />
-    <button (click)="downloadFile()">Download</button>
+    <div class="icon-name">
+        <img class="file-image" src="/data/images/file.svg" />
+        {{ item.name }}
+    </div>
+    <button class="surface-elevation-3" (click)="downloadFile()">
+        Download
+    </button>
+    <button class="surface-elevation-3" (click)="deleteFile()">Delete</button>
 </div>

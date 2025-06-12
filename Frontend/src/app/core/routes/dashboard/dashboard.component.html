@@ -1,14 +1,18 @@
-<main>
-    <div class="header">
+<main class="surface-elevation-1">
+    <div class="header surface-elevation-2">
         <input ngModel #fileInput type="file" multiple />
         <button (click)="uploadFiles()">Upload</button>
         <button (click)="downloadArchive()">Download ZIP</button>
     </div>
     <div class="grid-container">
         <app-item-container
+            class="surface-elevation-2"
             *ngFor="let item of items"
             [item]="item"
         ></app-item-container>
     </div>
-    <mat-slide-toggle (change)="toggle($event)"></mat-slide-toggle>
+    <app-progress-bar
+        class="progress-bar"
+        [progressPercentage]="progressPercentage"
+    ></app-progress-bar>
 </main>

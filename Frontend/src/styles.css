@@ -1,10 +1,91 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+    --primary: #bb86fc;
+    --primary-var: #3700b3;
+    --secondary: #03dac6;
+
+    --background: #121212;
+    --surface: #121212;
+    --error: #cf6679;
+}
+
+.surface-elevation-0 {
+    background-color: var(--background);
+    position: relative;
+}
+
+.surface-elevation-1 {
+    background-color: var(--background);
+    position: relative;
+}
+
+.surface-elevation-1::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-color: rgba(255, 255, 255, 0.05);
+    transition: background-color 0.2s ease;
+}
+
+.surface-elevation-2 {
+    background-color: var(--background);
+    position: relative;
+}
+
+.surface-elevation-2::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    inset: 0;
+    background-color: rgba(255, 255, 255, 0.07);
+    transition: background-color 0.2s ease;
+}
+
+.surface-elevation-3 {
+    background-color: var(--background);
+    position: relative;
+    z-index: 0;
+}
+
+.surface-elevation-3::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-color: rgba(255, 255, 255, 0.08);
+    transition: background-color 0.2s ease;
+    z-index: -1;
+}
+
+.surface-elevation-4 {
+    background-color: var(--background);
+    position: relative;
+}
+
+.surface-elevation-4::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-color: rgba(255, 255, 255, 0.09);
+    transition: background-color 0.2s ease;
+}
 
 html,
 body {
     height: 100%;
-}
-body {
+    width: 100%;
     margin: 0;
+    padding: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
+    color: #ffffff;
+}
+
+button {
+    color: #ffffff;
+}
+
+app-root {
+    width: 100%;
 }

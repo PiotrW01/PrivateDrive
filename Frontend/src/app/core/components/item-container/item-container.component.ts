@@ -17,4 +17,8 @@ export class ItemContainerComponent {
     downloadFile() {
         this.requestService.downloadFile(this.item.name);
     }
+
+    deleteFile() {
+        this.requestService.deleteItem(this.item.name);
+    }
 }

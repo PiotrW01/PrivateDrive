@@ -1,14 +1,44 @@
+main {
+    width: 80vw;
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+}
+
 .grid-container {
-    background-color: dodgerblue;
-    padding: 10px;
-    gap: 10px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, max-content));
+    margin-top: 16px;
+    margin-bottom: 16px;
+    padding: 8px;
+    gap: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
 }
 
 app-item-container {
-    width: 300px;
-    height: 300px;
-    background-color: gray;
+    width: 100%;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+}
+
+app-item-container.surface-elevation-2:hover::after {
+    background-color: rgba(255, 255, 255, 0.12);
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    height: 48px;
+    padding: 8px;
+}
+
+.progress-bar {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin: 32px;
+    width: 20%;
 }
