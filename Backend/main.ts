@@ -69,7 +69,7 @@ export class Server {
         this.app.post(
             "/upload",
             uploadMulter.single("file"),
-            async (req: Request, res: Response, next: NextFunction) => {
+            async (req: any, res: Response, next: NextFunction) => {
                 if (!req.file) {
                     res.sendStatus(400);
                     return;
@@ -106,7 +106,14 @@ export class Server {
         });
 
         this.app.delete("/removefile", async (req, res) => {
-            res.sendStatus(501);
+            console.log("A");
+            const name = typeof req.query.name === 'string' ? req.query.name : undefined;
+            if(!name) {
+                res.sendStatus(400);
+                return;
+            }
+            const status = await fController.deleteFile(name, storagePath);
+            res.sendStatus(status);
         });
     }
 

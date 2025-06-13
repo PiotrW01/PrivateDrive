@@ -6,9 +6,20 @@ import path from "path";
 import fs from "fs";
 
 class FileController {
-    private itemCache: Item[] = [];
-
-    async deleteFile() {}
+    
+    async deleteFile(name: string, directory:string): Promise<number> {
+        const filePath = path.join(directory, name);
+        if(fs.existsSync(filePath)) {
+            try {
+                fs.rmSync(filePath, {'maxRetries': 3});
+            }
+            catch {
+                return 400;
+            }
+            return 200;
+        }
+        return 400;
+    }
 
     async moveFile() {}
 

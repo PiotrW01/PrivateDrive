@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { RequestService } from '../../services/request.service';
 import { Item } from '../../models/item';
-import { NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf, ɵparseCookieValue } from '@angular/common';
 import { SortMode } from '../../models/sort-mode';
 import { ItemSortService } from '../../services/item-sort.service';
 import { ItemContainerComponent } from '../../components/item-container/item-container.component';
@@ -18,6 +18,7 @@ import {
 } from '@angular/material/slide-toggle';
 import { HttpEventType } from '@angular/common/http';
 import { ProgressBarComponent } from '../../components/progress-bar/progress-bar.component';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-dashboard',
@@ -38,6 +39,8 @@ export class DashboardComponent implements OnInit {
     isSortAscending: boolean = false;
     fileQueue: File[] = [];
     progressPercentage: string = '0%';
+    fileSelectorText: string = 'Select files...';
+    uploadRequest!: Subscription;
 
     constructor(
         private requestService: RequestService,
@@ -59,7 +62,7 @@ export class DashboardComponent implements OnInit {
     private async uploadNextFile() {
         const file: File = this.fileQueue[0];
         this.fileQueue.shift();
-        this.requestService.uploadItem(file).subscribe((event) => {
+        this.uploadRequest = this.requestService.uploadItem(file).subscribe((event) => {
             if (event.type === HttpEventType.UploadProgress) {
                 const percentDone = Math.round(
                     (100 * event.loaded) / (event.total ?? event.loaded)
@@ -102,6 +105,7 @@ export class DashboardComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        console.log(this.fileInput);
         this.updateItemList();
     }
 
@@ -112,11 +116,38 @@ export class DashboardComponent implements OnInit {
     private updateItemList() {
         this.items.length = 0;
         this.requestService.getItems().subscribe((receivedItems) => {
-            (receivedItems as Item[]).forEach((rItem) => {
+            receivedItems.forEach((rItem) => {
                 this.items.push(rItem);
                 console.log(rItem);
             });
             this.sorter.sortBy(this.items, this.sortMode, this.isSortAscending);
         });
+    }
+
+    changeSelectorText(): void {
+        const fAmount = this.fileInput.nativeElement.files.length;
+        if(fAmount === 1) {
+            this.fileSelectorText = 'Selected 1 file';
+        }
+        else if (fAmount > 1) {
+            this.fileSelectorText = `Selected ${fAmount} files`;
+        }
+        else {
+            this.fileSelectorText = 'Select files...';
+        }
+    }
+
+    resetFileSelector(): void {
+        this.fileInput.nativeElement.value = '';
+        this.fileSelectorText = 'Select files...';
+    }
+
+    cancelUpload(): void {
+        this.uploadRequest.unsubscribe();
+    }
+
+    onDeleteItem(itemToDelete: Item): void {
+        console.log(itemToDelete);
+        this.items = this.items.filter(item => item !== itemToDelete);
     }
 }

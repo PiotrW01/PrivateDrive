@@ -1,14 +1,22 @@
 <main class="surface-elevation-1">
     <div class="header surface-elevation-2">
-        <input ngModel #fileInput type="file" multiple />
-        <button (click)="uploadFiles()">Upload</button>
-        <button (click)="downloadArchive()">Download ZIP</button>
+        <div class="file-selector surface-elevation-3">
+            <label for="file-uploads" [textContent]="fileSelectorText"></label>
+            <input id="file-uploads" name="file-uploads" ngModel #fileInput type="file" class="surface-elevation-3 file-input" multiple (change)="changeSelectorText()"/>
+        </div>
+        <div class="buttons">
+            <button class="surface-elevation-3" (click)="uploadFiles()">Upload</button>
+            <button class="surface-elevation-3" (click)="downloadArchive()">Download ZIP</button>
+            <button class="surface-elevation-3" (click)="resetFileSelector()">Cancel</button>
+            <button class="surface-elevation-3" (click)="cancelUpload()">Cancel Upload</button>
+        </div>
     </div>
     <div class="grid-container">
         <app-item-container
             class="surface-elevation-2"
             *ngFor="let item of items"
             [item]="item"
+            (delete)="onDeleteItem($event)"
         ></app-item-container>
     </div>
     <app-progress-bar

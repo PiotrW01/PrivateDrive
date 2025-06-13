@@ -7,6 +7,8 @@ import {
 } from '@angular/common/http';
 import { AppConfigService } from './app-config.service';
 import { environment } from '../../../environments/environment';
+import { Item } from '../models/item';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
     providedIn: 'root',
@@ -16,7 +18,8 @@ export class RequestService {
 
     constructor(
         private client: HttpClient,
-        private appConfig: AppConfigService
+        private appConfig: AppConfigService,
+        private cookieService: CookieService
     ) {
         if (!environment.production) {
             this.apiUrl = environment.apiUrl;
@@ -32,7 +35,7 @@ export class RequestService {
     }
 
     getItems() {
-        return this.client.get(`${this.apiUrl}/files`);
+        return this.client.get<Item[]>(`${this.apiUrl}/files`);
     }
 
     downloadFile(id: string) {
@@ -53,7 +56,6 @@ export class RequestService {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('lastModified', file.lastModified.toString());
-
         return this.client.post(`${this.apiUrl}/upload`, formData, {
             headers: { enctype: 'multipart/form-data' },
             reportProgress: true,
@@ -65,7 +67,11 @@ export class RequestService {
     moveItem() {}
 
     deleteItem(name: string) {
-        this.client.delete(`${this.apiUrl}/removefile`);
+        return this.client.delete(`${this.apiUrl}/removefile`, {
+            params: { name },
+            responseType: "text",
+            observe: 'response'
+        });
     }
 
     renameItem() {}
