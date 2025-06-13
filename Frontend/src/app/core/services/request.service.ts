@@ -27,8 +27,7 @@ export class RequestService {
             this.apiUrl = this.appConfig.configData.apiUrl;
             console.log(this.appConfig.configData);
         } else {
-            this.apiUrl = `http://api.${window.location.hostname}`;
-            console.log(this.apiUrl);
+            console.log("no api url!");
         }
     }
 

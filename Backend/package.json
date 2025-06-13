@@ -8,8 +8,8 @@
         "start": "node dist/main.js",
         "dev": "nodemon --watch ./main.ts --watch src --watch public --ext ts --exec \"npm run build && npm start \"",
         "dev-w": "nodemon --watch ./main.ts --watch src --watch public --ext ts --exec \"npm run build-w && npm start\"",
-        "build": "tsc && cp -r public dist",
-        "build-w": "tsc && cmd /c \"xcopy public dist\\public /E /I /Y\""
+        "build": "tsc && cp -r public dist && cp package.json package-lock.json dist",
+        "build-w": "echo 'TODO: add copy pckg.json to dist' && tsc && cmd /c \"xcopy public dist\\public /E /I /Y"
     },
     "keywords": [],
     "author": "",

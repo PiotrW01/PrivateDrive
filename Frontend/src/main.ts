@@ -5,9 +5,6 @@ import { AppComponent } from './app/app.component';
 import { AppConfigService } from './app/core/services/app-config.service';
 
 async function main() {
-  // switch to true if api url is different from server url ## see public/config.json
-  if(false)
-  {
     try {
       const response = await fetch('/data/config.json');
       if (!response.ok) throw new Error('Failed to load config.json');
@@ -28,12 +25,6 @@ async function main() {
     } catch (err) {
       console.error(err);
     }
-  }
-  else 
-  {
-    bootstrapApplication(AppComponent, appConfig)
-      .catch((err) => console.error(err));
-  }
 }
 
 main();
